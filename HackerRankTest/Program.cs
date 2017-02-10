@@ -1,22 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 class Solution
 {
+
     static void Main(String[] args)
     {
-        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution */
-        string input = Console.ReadLine();
-        for (int i = 0; i < input.Length; i++)
+        int n = Convert.ToInt32(Console.ReadLine());
+        // your code goes here
+        int moves;
+
+        for (int i = 1; i < n; i++)
         {
-            if (i != input.Length - 1)
-                if (input[i] == input[i + 1])
+            for (int j = 1; j < n; j++)
+            {
+                if (i == j)
                 {
-                    input = input.Remove(i, 2);
-                    Console.WriteLine(input);
-                    i = -1;
+                    moves = (n - 1) % i == 0 ? (n - 1) / i : -1;
+                    Console.Write(moves.ToString() + " ");
                 }
+                else if ((n - 1) % (i + j) == 0)
+                {
+                    moves = (n - 1) / (i + j) * 2;
+                    Console.Write(moves.ToString() + " ");
+                }
+                else if (i == (n - 1))
+                {
+                    moves = i % j == 0 ? i * i / (2 * j) : -1;
+                    Console.Write(moves.ToString() + " ");
+                }
+                else if (j == (n - 1))
+                {
+                    moves = j % i == 0 ? j * j / (2 * i) : -1;
+                    Console.Write(moves.ToString() + " ");
+                }
+                else if ((n - 1) % i == 0 && (n - 1) % j == 0)
+                {
+                    if (i < j)
+                    {
+                        moves = ((n - 1) / (((n - 1) / i) / ((n - 1) / j))) + 2;
+                        Console.Write(moves.ToString() + " ");
+                    }
+                    else
+                    {
+                        moves = ((n - 1) / (((n - 1) / j) / ((n - 1) / i))) + 2;
+                        Console.Write(moves.ToString() + " ");
+                    }
+                }
+                else if((n - 1) % i == 0)
+                {
+                    moves = (n - 1) / i * 2;
+                    Console.Write(moves.ToString() + " ");
+                }
+                else if ((n - 1) % j == 0)
+                {
+                    moves = (n - 1) / j * 2;
+                    Console.Write(moves.ToString() + " ");
+                }
+            }
+            Console.WriteLine();
         }
-        Console.WriteLine(input == "" ? "Empty String" : input);
+        Console.ReadLine();
     }
 }
