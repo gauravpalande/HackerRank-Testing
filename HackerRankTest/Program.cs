@@ -7,60 +7,63 @@ class Solution
 
     static void Main(String[] args)
     {
-        int n = Convert.ToInt32(Console.ReadLine());
-        // your code goes here
-        int moves;
+        // Save input in character array
+        char[] individualCharacters = Console.ReadLine().ToCharArray();
 
-        for (int i = 1; i < n; i++)
+        // Create dictionary using the the char array
+        Dictionary<char, int> characterFrequencyDictionary = new Dictionary<char, int>();
+
+        // Fill the created dictionary
+        foreach (char c in individualCharacters)
         {
-            for (int j = 1; j < n; j++)
+            if (characterFrequencyDictionary.ContainsKey(c))
             {
-                if (i == j)
+                characterFrequencyDictionary[c]++;
+            }
+            else
+            {
+                characterFrequencyDictionary.Add(c, 1);
+            }
+        }
+
+        // Initialize pair removal integer
+        int j = 2;
+
+        // Initialize bool for final answer
+        bool seperate = true;
+
+        // Logic to sequentially extract pairs from characterFrequencyDictionary
+        do
+        {
+            foreach (KeyValuePair<char, int> pair in characterFrequencyDictionary.ToList())
+            {
+                if (pair.Value > 0)
                 {
-                    moves = (n - 1) % i == 0 ? (n - 1) / i : -1;
-                    Console.Write(moves.ToString() + " ");
-                }
-                else if ((n - 1) % (i + j) == 0)
-                {
-                    moves = (n - 1) / (i + j) * 2;
-                    Console.Write(moves.ToString() + " ");
-                }
-                else if (i == (n - 1))
-                {
-                    moves = i % j == 0 ? i * i / (2 * j) : -1;
-                    Console.Write(moves.ToString() + " ");
-                }
-                else if (j == (n - 1))
-                {
-                    moves = j % i == 0 ? j * j / (2 * i) : -1;
-                    Console.Write(moves.ToString() + " ");
-                }
-                else if ((n - 1) % i == 0 && (n - 1) % j == 0)
-                {
-                    if (i < j)
+                    characterFrequencyDictionary[pair.Key]--;
+                    j--;
+                    if (j == 0)
                     {
-                        moves = ((n - 1) / (((n - 1) / i) / ((n - 1) / j))) + 2;
-                        Console.Write(moves.ToString() + " ");
+                        break;
                     }
-                    else
-                    {
-                        moves = ((n - 1) / (((n - 1) / j) / ((n - 1) / i))) + 2;
-                        Console.Write(moves.ToString() + " ");
-                    }
-                }
-                else if((n - 1) % i == 0)
-                {
-                    moves = (n - 1) / i * 2;
-                    Console.Write(moves.ToString() + " ");
-                }
-                else if ((n - 1) % j == 0)
-                {
-                    moves = (n - 1) / j * 2;
-                    Console.Write(moves.ToString() + " ");
                 }
             }
-            Console.WriteLine();
-        }
+
+            // Check if all pair are extracted
+            if (j > 0 && characterFrequencyDictionary.Where(x => x.Value > 0).Count() > 0)
+            {
+                seperate = false;
+                break;
+            }
+
+            // Else continue removing pair
+            else
+            {
+                j = 2;
+            }
+        } while (characterFrequencyDictionary.Where(x => x.Value > 0).Count() > 0);
+
+        // Provide output
+        Console.WriteLine(seperate);
         Console.ReadLine();
     }
 }
